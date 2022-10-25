@@ -1,14 +1,17 @@
 const express = require('express');
-const { moviesMock } = require('../utils/mocks/movies');
+//const { moviesMock } = require('../utils/mocks/movies');
+const MoviesService = require('../services/moviesServices');
 
 function moviesApi(app) {
   const router = express.Router();
+  //Definir la ruta principal de consumo
   app.use('/api/movies', router);
-
+  //Crear el objeto de la clase MoviesService
+  const moviesService = new MoviesService();
+  //Definir mis rutas de consumo
   router.get('/', async function(req, res, next) {
     try {
-      const movies = await Promise.resolve(moviesMock);
-
+      const movies = await moviesService.getAllMovies();
       res.status(200).json({
         data: movies,
         message: 'movies listed'
@@ -17,13 +20,20 @@ function moviesApi(app) {
       next(err);
     }
   });
-
+  //Para obtener una película estamos pasando información
+  //por parametro (params)
   router.get('/:movieId', async function(req, res, next) {
+
+    console.log("MI ID DE PELICULA", req.params );
+    const { movieId } = req.params;
+    console.log("MI ID DE PELICULA DESTRUCTURADA", movieId );
+    
     try {
-      const movies = await Promise.resolve(moviesMock[0]);
+
+      const movie = await moviesService.getMovie( movieId );
 
       res.status(200).json({
-        data: movies,
+        data: movie,
         message: 'movie retrieved'
       });
     } catch (err) {

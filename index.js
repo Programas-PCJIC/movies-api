@@ -1,9 +1,10 @@
 const express = require('express');
 const app = express();
 
+//Aspectos de Configuración
 const { config } =require('./config/index');
-
-const moviesApi = require('./routes/movies.js');
+//Rutas de mi Aplicación (Controladores)
+const moviesApi = require('./routes/moviesRoutes.js');
 
 moviesApi(app);
 
